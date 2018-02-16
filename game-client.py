@@ -13,6 +13,7 @@ import socketserver
 UDP_IP = "192.168.1.13"
 UDP_PORT = 12000 #used the port # made by server side.
 
+global playerState
 playerState = 3
 
 mrequest = 'Request to play'
