@@ -3,8 +3,8 @@ import enchant #pip install pyenchant
 import random
 import string
 
-UDP_SERVER_IP = #insert an IP number
-UDP_PORT = #insert a port number
+UDP_SERVER_IP = '192.168.1.13'
+UDP_PORT = 12000
 
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -45,14 +45,12 @@ message = ''
 message1 = ''
 message2 = ''
 
-turn = 0
-win = 1
-lose = 2
-begin = 3
+turn = "0"
+win = "1"
+lose = "2"
+begin = "3"
 
-player1State = begin
-player2State = begin
-
+playerState = begin
 
 gameState = 1
 
@@ -100,4 +98,33 @@ while True:
     while (gameState == 1):
         
         print('Checking game state of Player 1...')
-        serverSocket.sendto()
+        serverSocket.sendto(playerState.encode(), addr1)
+
+        if playerState == begin:
+            serverSocket.sendto(randomLetter.encode(), addr1)
+            word1, addr = serverSocket.recvfrom(2048)
+            print(word1.decode())
+        elif playerState != win or playerState != lose:
+            word1, addr = serverSocket.recvfrom(2048)
+        else:
+            gameState = 0
+            break
+
+        
+
+        #after player 1 sends back the word, this will have all the checking functions. 
+
+        playerState = turn
+
+        print('Checking game state of Player 2...')
+        serverSocket.sendto(playerState.encode(), addr2)
+
+        if playerState != win or playerState != lose:
+            word2, addr = serverSocket.recvfrom(2048)
+            print(word2.decode())
+        else:
+            gameState = 0
+
+        #after player 2 sends back the word, this will have all the checking functions.
+
+        playerState = win
