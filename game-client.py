@@ -39,16 +39,17 @@ print (rules.decode())
 
 if playerid == 1:
     while playerState != 1 or playerState != 2:
-        print("Checking game state...")
+        print("Waiting...")
         state, serverAddress = clientSocket.recvfrom(2048)
         state = int(state.decode())
+        global playerState
         playerState = state
-
 
         if playerState == 0:
             print ('Your turn!\nEnter a word')
             word = input().encode()
             clientSocket.sendto(word,(UDP_IP, UDP_PORT))
+            print ('Waiting for the other player...')
 
         elif playerState == 1:
             print('You Win!')
@@ -58,11 +59,13 @@ if playerid == 1:
             #reason, serverAddress = clientSocket.recvfrom(2048)
             #print ('You lost because: ' + reason.decode())
         elif playerState == 3:
+            letter, serverAddress = clientSocket.recvfrom(1024)
+            letter = letter.decode()
             print ('Your turn Player 1!\nEnter a word beginning with the random letter')
-            word = input()
+            print ('Your letter: ' + letter)
+            word = input().encode()
             clientSocket.sendto(word,(UDP_IP,UDP_PORT))
-        
-        print ('Waiting for the other player...')
+            print ('Waiting for the other player...')
 
 
     clientSocket.close() #closes socket after completion of message transfer
@@ -70,9 +73,10 @@ if playerid == 1:
 if playerid == 2:
     while playerState != 1 or playerState != 2:
 
-        print("Checking game state...")
+        print("Waiting...")
         state, serverAddress = clientSocket.recvfrom(2048)
         state = int(state.decode())
+        global playerState
         playerState = state
 
 
@@ -88,8 +92,6 @@ if playerid == 2:
             print ('You Lose!')
             #reason, serverAddress = clientSocket.recvfrom(2048)
             #print ('You lost because: ' + reason.decode())
-        elif playerState == 3:
-            print ('Waiting for the other player...')
 
 
     clientSocket.close() #closes socket after completion of message transfer
