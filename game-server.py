@@ -1,11 +1,45 @@
 import socket
+import enchant #pip install pyenchant
+import random
+import string
 
-UDP_SERVER_IP = '192.168.1.30'
-UDP_PORT = 12000
+UDP_SERVER_IP = #insert an IP number
+UDP_PORT = #insert a port number
 
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 serverSocket.bind((UDP_SERVER_IP, UDP_PORT))
+
+spell_checker = enchant.Dict('en-US') #create enchant object to check if the words is real.
+
+#This function is to extract the last letter of the word.
+def lastLetter(word):
+    listToWord = list(word)
+    last = (len(listToWord) - 1)
+    return listToWord[last]
+
+#This function is to extract the first letter of the word.
+def firstLetter(word) :
+    listToWord = list(word)
+    return listToWord[0]
+
+#This function is to check the integrity of the first word sent by player 1.
+def startingRound (word, random):
+    if (lastLetter(word) != random):
+        playerState = 2
+    elif (spell_checker.check(word) == False):
+        playerState = 2
+    else:
+        playerState = 0
+
+#This function is to check the integrity of the word sent by players after the 1st round.
+def subsequentRound (word, prevword):
+    if (lastLetter(word) != firstLetter(prevword)):
+        playerState = 2
+    elif (spell_checker.check(word) == False):
+        playerState = 2
+    else:
+        playerState = 0
 
 message = ''
 message1 = ''
@@ -23,6 +57,10 @@ player2State = begin
 gameState = 1
 
 while True:
+
+    randomLetter = random.choice(string.ascii_lowercase) #generates a new random lower case letter to start off the game.
+
+
     print ('Waiting for player 1...')
     player1, addr1 = serverSocket.recvfrom(2048)
 
