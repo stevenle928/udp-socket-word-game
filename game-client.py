@@ -76,7 +76,6 @@ if playerid == 2:
         print("Waiting...")
         state, serverAddress = clientSocket.recvfrom(2048)
         state = int(state.decode())
-        global playerState
         playerState = state
 
 
