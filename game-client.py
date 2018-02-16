@@ -40,7 +40,7 @@ print (rules.decode())
 
 if playerid == 1:
     while playerState != 1 or playerState != 2:
-        print("Waiting...")
+        print("\nWaiting...")
         state, serverAddress = clientSocket.recvfrom(2048)
         state = int(state.decode())
         playerState = state
@@ -53,9 +53,11 @@ if playerid == 1:
 
         elif playerState == 1:
             print('You Win!')
+            break
 
         elif playerState == 2:
             print ('You Lose!')
+            break
             #reason, serverAddress = clientSocket.recvfrom(2048)
             #print ('You lost because: ' + reason.decode())
         elif playerState == 3:
@@ -73,9 +75,10 @@ if playerid == 1:
 if playerid == 2:
     while playerState != 1 or playerState != 2:
 
-        print("Waiting...")
+        print("\nWaiting...")
         state, serverAddress = clientSocket.recvfrom(2048)
         state = int(state.decode())
+        
         playerState = state
 
 
@@ -86,9 +89,10 @@ if playerid == 2:
 
         elif playerState == 1:
             print('You Win!')
-
+            break
         elif playerState == 2:
             print ('You Lose!')
+            break
             #reason, serverAddress = clientSocket.recvfrom(2048)
             #print ('You lost because: ' + reason.decode())
 
