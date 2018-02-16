@@ -9,8 +9,8 @@
 import socket 
 import socketserver
 
-#UDP_IP = "192.168.1.13" #Used the wireless LAN ipv4 address of server's computer as the destination address
-UDP_IP = "192.168.1.13"
+#Used the wireless LAN ipv4 address of server's computer as the destination address
+UDP_IP = #enter IP here
 UDP_PORT = 12000 #used the port # made by server side.
 
 global playerState

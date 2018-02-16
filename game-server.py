@@ -3,7 +3,7 @@ import enchant #pip install pyenchant
 import random
 import string
 
-UDP_SERVER_IP = '192.168.1.13'
+UDP_SERVER_IP = #Enter IP Here
 UDP_PORT = 12000
 
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
