@@ -47,7 +47,8 @@ if playerid == 1:
         playerState = state
 
         if state == '0':
-            print ('Your turn!\nEnter a word')
+            prevword, serverAddress = clientSocket.recvfrom(1024)
+            print ('Your turn!\nEnter a word: ' + prevword.decode())
             word = input().encode()
             clientSocket.sendto(word,(UDP_IP, UDP_PORT))
 
@@ -58,6 +59,7 @@ if playerid == 1:
         elif state == '2':
             print ('You Lose!')
             reason, serverAddress = clientSocket.recvfrom(2048)
+            print(reason.decode())
             print ('You lost because: ' + reason.decode())
             break
             
@@ -81,7 +83,8 @@ if playerid == 2:
         state = state.decode()
         
         if state == '0':
-            print ('Your turn!\nEnter a word')
+            prevword, serverAddress = clientSocket.recvfrom(1024)
+            print ('Your turn!\nEnter a word: ' + prevword.decode())
             word = input().encode()
             clientSocket.sendto(word,(UDP_IP, UDP_PORT))
 

@@ -145,6 +145,7 @@ while True:
                 word1 = word1.lower()
                 print('Word received from player1: ' + word1)
             elif playerState != win or playerState != lose:
+                serverSocket.sendto(prevword.encode(), addr1)
                 word1, addr = serverSocket.recvfrom(2048)
                 word1 = word1.decode()
                 word1 = word1.lower()
@@ -177,6 +178,7 @@ while True:
 
 
             if playerState != win or playerState != lose:
+                serverSocket.sendto(prevword.encode(), addr2)
                 word2, addr = serverSocket.recvfrom(2048)
                 word2 = word2.decode()
                 word2 = word2.lower()
