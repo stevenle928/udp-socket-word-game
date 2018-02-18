@@ -10,7 +10,7 @@ import socket
 import socketserver
 
 #Used the wireless LAN ipv4 address of server's computer as the destination address
-UDP_IP = #enter IP here
+UDP_IP = '10.0.0.245'
 UDP_PORT = 12000 #used the port # made by server side.
 
 global playerState
@@ -49,7 +49,6 @@ if playerid == 1:
             print ('Your turn!\nEnter a word')
             word = input().encode()
             clientSocket.sendto(word,(UDP_IP, UDP_PORT))
-            print ('Waiting for the other player...')
 
         elif playerState == 1:
             print('You Win!')
@@ -67,8 +66,6 @@ if playerid == 1:
             print ('Your letter: ' + letter)
             word = input().encode()
             clientSocket.sendto(word,(UDP_IP,UDP_PORT))
-            print ('Waiting for the other player...')
-
 
     clientSocket.close() #closes socket after completion of message transfer
 

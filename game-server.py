@@ -1,9 +1,10 @@
 import socket
 import enchant #pip install pyenchant
+
 import random
 import string
 
-UDP_SERVER_IP = #Enter IP Here
+UDP_SERVER_IP = '10.0.0.245'
 UDP_PORT = 12000
 
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -25,6 +26,8 @@ def firstLetter(word) :
 
 #This function is to check the integrity of the first word sent by player 1.
 def startingRound (word, random):
+    global playerState
+
     if (lastLetter(word) != random):
         playerState = 2
     elif (spell_checker.check(word) == False):
@@ -34,12 +37,17 @@ def startingRound (word, random):
 
 #This function is to check the integrity of the word sent by players after the 1st round.
 def subsequentRound (word, prevword):
+    global playerState
     if (lastLetter(word) != firstLetter(prevword)):
         playerState = 2
     elif (spell_checker.check(word) == False):
         playerState = 2
     else:
         playerState = 0
+
+def ruleChecker(word):
+    global playerState
+
 
 message = ''
 message1 = ''
@@ -108,12 +116,9 @@ while True:
             word1, addr = serverSocket.recvfrom(2048)
         else:
             gameState = 0
-            break
-
-        
-
         #after player 1 sends back the word, this will have all the checking functions. 
-
+        
+        
         playerState = turn
 
         print('Checking game state of Player 2...')
