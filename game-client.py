@@ -13,8 +13,6 @@ import socketserver
 UDP_IP = '10.0.0.245'
 UDP_PORT = 12000 #used the port # made by server side.
 
-global playerState
-playerState = 3
 
 mrequest = 'Request to play'
 mrequest = mrequest.encode(encoding='utf-8',errors='strict')#convert to byte code.
@@ -39,27 +37,29 @@ print (rules.decode())
 
 
 if playerid == 1:
-    while playerState != 1 or playerState != 2:
+    state, serverAddress = clientSocket.recvfrom(2048)
+    state = state.decode()
+    while state != '1' or state != '2':
         print("\nWaiting...")
         state, serverAddress = clientSocket.recvfrom(2048)
-        state = int(state.decode())
+        state = state.decode()
         playerState = state
 
-        if playerState == 0:
+        if state == '0':
             print ('Your turn!\nEnter a word')
             word = input().encode()
             clientSocket.sendto(word,(UDP_IP, UDP_PORT))
 
-        elif playerState == 1:
+        elif state == '1':
             print('You Win!')
             break
 
-        elif playerState == 2:
+        elif state == '2':
             print ('You Lose!')
             break
             #reason, serverAddress = clientSocket.recvfrom(2048)
             #print ('You lost because: ' + reason.decode())
-        elif playerState == 3:
+        elif state == '3':
             letter, serverAddress = clientSocket.recvfrom(1024)
             letter = letter.decode()
             print ('Your turn Player 1!\nEnter a word beginning with the random letter')
@@ -70,24 +70,23 @@ if playerid == 1:
     clientSocket.close() #closes socket after completion of message transfer
 
 if playerid == 2:
-    while playerState != 1 or playerState != 2:
+    state, serverAddress = clientSocket.recvfrom(2048)
+    state = state.decode()
+    while state != '1' or state != '2':
 
         print("\nWaiting...")
         state, serverAddress = clientSocket.recvfrom(2048)
-        state = int(state.decode())
+        state = state.decode()
         
-        playerState = state
-
-
-        if playerState == 0:
+        if state == '0':
             print ('Your turn!\nEnter a word')
             word = input().encode()
             clientSocket.sendto(word,(UDP_IP, UDP_PORT))
 
-        elif playerState == 1:
+        elif state == '1':
             print('You Win!')
             break
-        elif playerState == 2:
+        elif state == '2':
             print ('You Lose!')
             break
             #reason, serverAddress = clientSocket.recvfrom(2048)

@@ -3,9 +3,11 @@ import socket
 import random
 import enchant
 
-spell_checker = enchant.Dict('en-US') #create enchant object to check if the words is real.
+checker = enchant.Dict('en-US') #create enchant object to check if the words is real.
 
-playerState = 3
+playerState = '0'
+randomLetter = 'e'
+prevword = 'vape'
 
 def lastLetter(word):
     listToWord = list(word)
@@ -22,22 +24,43 @@ def startingRound (word, random):
     global playerState
 
     if (firstLetter(word) != random):
-        playerState = 2
-    elif (spell_checker.check(word) == False):
-        playerState = 2
+        return False
+    elif (checker.check(word) == False):
+        return False
     else:
-        playerState = 0
+        return True
 
 #This function is to check the integrity of the word sent by players after the 1st round.
 def subsequentRound (word, prevword):
     global playerState
-    if (lastLetter(word) != firstLetter(prevword)):
-        playerState = 2
-    elif (spell_checker.check(word) == False):
-        playerState = 2
+    if (firstLetter(word) != lastLetter(prevword)):
+        return False
+    elif (checker.check(word) == False):
+        return False
     else:
-        playerState = 0
+        return True
 
-startingRound('alligator','a')
+def ruleCheck(word):
+    global playerState
+    global randomLetter
+    global prevword
 
-print (playerState)
+    if playerState == '3' and (not startingRound(word, randomLetter)):
+        playerState = '2'
+    elif playerState == '0' and (not subsequentRound(word,prevword)):
+        playerState = '2'
+    else:
+        playerState = '0'
+    
+    
+
+# startingRound('alligator','b')
+
+# print (playerState)
+
+# subsequentRound('alligator', 'abra')
+
+# print (playerState)
+
+ruleCheck('elf')
+print(playerState)

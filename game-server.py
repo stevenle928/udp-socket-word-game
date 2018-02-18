@@ -13,6 +13,22 @@ serverSocket.bind((UDP_SERVER_IP, UDP_PORT))
 
 spell_checker = enchant.Dict('en-US') #create enchant object to check if the words is real.
 
+message = ''
+message1 = ''
+message2 = ''
+
+randomLetter = ''
+prevword = ''
+
+turn = '0'
+win = '1'
+lose = '2'
+begin = '3'
+
+playerState = begin
+
+gameState = 1
+
 #This function is to extract the last letter of the word.
 def lastLetter(word):
     listToWord = list(word)
@@ -25,42 +41,35 @@ def firstLetter(word) :
     return listToWord[0]
 
 #This function is to check the integrity of the first word sent by player 1.
-def startingRound (word, random):
-    global playerState
-
-    if (lastLetter(word) != random):
-        playerState = 2
+def matchRandom (word, random):
+    if (firstLetter(word) != random):
+        return False
     elif (spell_checker.check(word) == False):
-        playerState = 2
+        return False
     else:
-        playerState = 0
+        return True
 
 #This function is to check the integrity of the word sent by players after the 1st round.
-def subsequentRound (word, prevword):
-    global playerState
-    if (lastLetter(word) != firstLetter(prevword)):
-        playerState = 2
+def matchLastLetter (word, prevword):
+    if (firstLetter(word) != lastLetter(prevword)):
+        return False
     elif (spell_checker.check(word) == False):
-        playerState = 2
+        return False
     else:
-        playerState = 0
+        return True
 
-def ruleChecker(word):
+#Checks to see if the word returned by the player is valid and follows the rules.
+def ruleCheck(word):
     global playerState
+    global randomLetter
+    global prevword
 
-
-message = ''
-message1 = ''
-message2 = ''
-
-turn = "0"
-win = "1"
-lose = "2"
-begin = "3"
-
-playerState = begin
-
-gameState = 1
+    if playerState == '3' and (not matchRandom(word, randomLetter)):
+        playerState = '2'
+    elif playerState == '0' and (not matchLastLetter(word,prevword) or word == prevword):
+        playerState = '2'
+    else:
+        playerState = '0'
 
 while True:
 
@@ -96,11 +105,15 @@ while True:
                 + '\t 2) The word entered does not begin with the last letter of\n'
                 + '\t    the previous word (but on turn 1, player 1\'s word must)\n'
                 + '\t    start with the randomly generated letter\n'
-                + '\t 3) You do not enter a word within 5 seconds')
+                + '\t 3) Your word cannot be a repeat of the previous word.'
+                + '\t 4) You do not enter a word within 5 seconds')
         
     rulesOfGame = rulesOfGame.encode()
     serverSocket.sendto(rulesOfGame, addr1)
     serverSocket.sendto(rulesOfGame, addr2)
+
+    serverSocket.sendto(playerState.encode(), addr1)
+    serverSocket.sendto(playerState.encode(), addr2)
 
 
     while (gameState == 1):
@@ -111,25 +124,47 @@ while True:
         if playerState == begin:
             serverSocket.sendto(randomLetter.encode(), addr1)
             word1, addr = serverSocket.recvfrom(2048)
-            print(word1.decode())
+            word1 = word1.decode()
+            word1 = word1.lower()
+            print('Word received from player1: ' + word1)
         elif playerState != win or playerState != lose:
             word1, addr = serverSocket.recvfrom(2048)
+            word1 = word1.decode()
+            word1 = word1.lower()
+            print('Word received from player1: ' + word1)
         else:
-            gameState = 0
-        #after player 1 sends back the word, this will have all the checking functions. 
+            #gameState = 0
+            print ("Game over! Player1 has won the game!")
+            break
+
+        #after player 1 sends back the word, this will have all the checking functions.
+        ruleCheck(word1)
         
+        if(playerState == '2'):
+            serverSocket.sendto(playerState.encode(), addr1)
+            playerState = '1'
+        else:
+            prevword = word1
         
-        playerState = turn
 
         print('Checking game state of Player 2...')
         serverSocket.sendto(playerState.encode(), addr2)
 
         if playerState != win or playerState != lose:
             word2, addr = serverSocket.recvfrom(2048)
-            print(word2.decode())
+            word2 = word2.decode()
+            word2 = word2.lower()
+            print('Word received from player2: ' + word2)
         else:
-            gameState = 0
+            #gameState = 0
+            print("Game over! Player2 has won the game!")
+            break
 
         #after player 2 sends back the word, this will have all the checking functions.
+        ruleCheck(word2)
 
-        playerState = win
+        if(playerState == '2'):
+            serverSocket.sendto(playerState.encode(), addr2)
+            playerState = '1'
+        else:
+            prevword = word2
