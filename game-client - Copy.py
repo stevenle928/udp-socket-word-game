@@ -31,9 +31,10 @@ playerid = int(playerid[len(playerid) - 1])
 # if(type(message) is str):
 #     print('true')
 
-print (message) #prints the new message, should be "Welcome you are player [playerid]"
+
 rules, serverAddress = clientSocket.recvfrom(2048)
 print (rules.decode())
+print (message) #prints the new message, should be "Welcome you are player [playerid]"
 
 
 if playerid == 1:
@@ -56,9 +57,10 @@ if playerid == 1:
 
         elif state == '2':
             print ('You Lose!')
+            reason, serverAddress = clientSocket.recvfrom(2048)
+            print ('You lost because: ' + reason.decode())
             break
-            #reason, serverAddress = clientSocket.recvfrom(2048)
-            #print ('You lost because: ' + reason.decode())
+            
         elif state == '3':
             letter, serverAddress = clientSocket.recvfrom(1024)
             letter = letter.decode()
@@ -88,9 +90,10 @@ if playerid == 2:
             break
         elif state == '2':
             print ('You Lose!')
+            reason, serverAddress = clientSocket.recvfrom(2048)
+            print ('You lost because: ' + reason.decode())
             break
-            #reason, serverAddress = clientSocket.recvfrom(2048)
-            #print ('You lost because: ' + reason.decode())
+            
 
 
     clientSocket.close() #closes socket after completion of message transfer

@@ -62,5 +62,8 @@ def ruleCheck(word):
 
 # print (playerState)
 
-ruleCheck('elf')
-print(playerState)
+# ruleCheck('elf')
+# print(playerState)
+
+for x in 'hello':
+    print (x)
