@@ -63,7 +63,6 @@ if playerid == 1:
         elif state == '2':
             print ('You Lose!')
             reason, serverAddress = clientSocket.recvfrom(2048)
-            print(reason.decode())
             print ('You lost because: ' + reason.decode())
             break
         #if state is '3', meaning beginning of game for player1

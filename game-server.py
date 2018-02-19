@@ -44,7 +44,7 @@ while True:
         last = (len(listToWord) - 1)
         return listToWord[last]
     #This function is to extract the first letter of the word.
-    def firstLetter(word) :
+    def firstLetter(word):
         listToWord = list(word)
         return listToWord[0]
     #This function is to check if the first letter of the word input by player1, turn1, 
@@ -60,7 +60,7 @@ while True:
             return False
         else:
             return True
-#A function that checks the wordHistory list that contains all words used to check if the input word is a repeat.
+    #A function that checks the wordHistory list that contains all words used to check if the input word is a repeat.
     def checkRepeat (word):
         global wordHistory
         for i in wordHistory:
