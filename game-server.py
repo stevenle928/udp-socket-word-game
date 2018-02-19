@@ -120,8 +120,9 @@ while True:
                 + '\t 2) The word entered does not begin with the last letter of\n'
                 + '\t    the previous word (but on turn 1, player 1\'s word must)\n'
                 + '\t    start with the randomly generated letter\n'
-                + '\t 3) Your word cannot be a repeat of the previous word.'
-                + '\t 4) You do not enter a word within 5 seconds')
+                + '\t 3) Your word cannot be a repeat of the previous word.')
+                #+ '\t 4) You do not enter a word within 5 seconds') 
+                # #We tried implementing a timeout mechanism, but were not able to within the time limit.
     #encodes rulesOfGame string to byte to send to players
     rulesOfGame = rulesOfGame.encode()
     serverSocket.sendto(rulesOfGame, addr1)
